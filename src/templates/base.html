@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %} - TIL</title>
+  </head>
+  <body>
+    <h1>TIL - Today I Learned</h1>
+    <hr>
+    <a href="/">Home</a>&nbsp;
+    <a href="/today">Today</a>&nbsp;
+    <a href="/submit">Submit</a>&nbsp;
+    <a href="/about">About</a>&nbsp;
+    <hr>
+    {% block content %}
+
+    {% endblock %}
+  </body>
+</html>
