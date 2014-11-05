@@ -12,7 +12,7 @@ def test_home():
 def test_today():
     '''testing /today'''
     rv = app.get('/today')
-    assert 'What people learnt today' in rv.data
+    assert 'What people have learnt' in rv.data
 
 def test_submit_get():
     '''testing /submit (GET)'''
