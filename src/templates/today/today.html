@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Today{% endblock %}
 {% block content %}
-  <h3>What people learnt today...</h3>
+  <h3>What people have learnt...</h3>
+  <ul>
+    {% for item in data %}
+    <li><cite>{{ item['value']['text'] }}</cite> - {{ item['value']['nick'] }}</li>
+    {% endfor %}
+  </ul>
 {% endblock %}

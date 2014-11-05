@@ -1,4 +1,5 @@
 from flask import Flask, url_for, render_template, request
+from dbHelper.dbHelper import *
 
 app = Flask(__name__)
 
@@ -8,11 +9,20 @@ def home():
 
 @app.route('/today')
 def today():
-    return render_template('today/today.html')
+    pages = getRecentTIL()
+    page = pages.next()
+    results = page['results']
+    results.reverse()
+    return render_template('today/today.html', data=results)
+
+@app.route('/today/<pageno>')
+def today_more(pageno):
+    pass
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     if request.method == 'POST':
+        saveTIL(request.form['til'], 'anon')
         return render_template('submit/submitted.html', text=request.form['til'])
     else:
         return render_template('submit/tilForm.html')
