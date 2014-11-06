@@ -2,3 +2,4 @@ venv
 *.pyc
 *.swp
 .DS_STORE
+.cache

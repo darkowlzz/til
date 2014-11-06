@@ -2,3 +2,4 @@ Flask
 gunicorn
 nose
 porc
+flake8
