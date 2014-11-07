@@ -1,12 +1,12 @@
-import src.dbHelper.dbHelper as db
-import apikeys as keys
+from src.dbHelper.dbHelper import DBHelper
+from src.apikeys import ORCHESTRATE_KEY
 import porc
 
-API_KEY = keys.getDBkey()
 COLLECTION_STATS = 'til_stats'
 COLLECTION_TIL = 'til_til'
 
-client = porc.Client(API_KEY)
+db = DBHelper(ORCHESTRATE_KEY)
+client = porc.Client(ORCHESTRATE_KEY)
 
 
 def test_getNextID():
