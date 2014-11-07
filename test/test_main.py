@@ -1,6 +1,7 @@
-from src import main
+from src.main import create_app
 
-app = main.app.test_client()
+# Create a test client
+app = create_app().test_client()
 
 
 def test_home():
