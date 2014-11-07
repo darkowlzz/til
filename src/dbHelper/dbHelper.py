@@ -1,6 +1,4 @@
-import sys
-sys.path.append('../')
-import apikeys as keys
+import src.apikeys as keys
 import porc
 
 API_KEY = keys.getDBkey()

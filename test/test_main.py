@@ -1,6 +1,4 @@
-import sys
-sys.path.append('../src')
-import main
+from src import main
 
 app = main.app.test_client()
 
