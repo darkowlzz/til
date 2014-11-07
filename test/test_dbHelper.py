@@ -1,12 +1,11 @@
-import sys
-sys.path.append('../src')
-import dbHelper.dbHelper as db
+import src.dbHelper.dbHelper as db
 import apikeys as keys
 import porc
 
 API_KEY = keys.getDBkey()
 COLLECTION_STATS = 'til_stats'
 COLLECTION_TIL = 'til_til'
+
 client = porc.Client(API_KEY)
 
 
