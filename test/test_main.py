@@ -19,15 +19,16 @@ def test_today():
 def test_submit_get():
     '''testing /submit (GET)'''
     rv = app.get('/submit')
-    assert 'Enter your TIL' in rv.data
+    assert 'Share your TIL' in rv.data
 
 
 def test_submit_post():
     '''test /submit (POST)'''
     rv = app.post('/submit', data=dict(
-        til='learnt flask'
+        til='learnt flask',
+        nick='nosetest',
     ), follow_redirects=True)
-    assert 'Enter your TIL' not in rv.data
+    assert 'Share your TIL' not in rv.data
     assert 'Submitted TIL' in rv.data
     assert 'learnt flask' in rv.data
 

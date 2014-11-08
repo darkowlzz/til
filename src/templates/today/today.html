@@ -1,10 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Today{% endblock %}
-{% block content %}
+{% block maintitle %}Today{% endblock %}
+{% block maincontent %}
   <h3>What people have learnt...</h3>
-  <ul>
+  <ul class="list-group">
     {% for item in data %}
-    <li><cite>{{ item['value']['text'] }}</cite> - {{ item['value']['nick'] }}</li>
+    <li class="list-group-item">
+      <cite>"{{ item['value']['text'] }}"</cite> - {{ item['value']['nick'] }}
+    </li>
     {% endfor %}
   </ul>
 {% endblock %}
