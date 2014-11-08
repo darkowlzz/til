@@ -1,10 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Submit{% endblock %}
-{% block content %}
-  <h3>Enter your TIL:</h3>
+{% block maintitle %}Submit{% endblock %}
+{% block maincontent %}
+  <h3>Share your TIL:</h3>
   <form action="" method="POST">
-    TIL: <br>
-    <textarea cols="100" rows="15" name="til"></textarea><br>
-    <input type="submit" value="Submit"><br>
+    <div class="input-group">
+      <span class="input-group-addon">TIL</span>
+      <textarea rows="3" class="form-control" name="til" val="" placeholder="What did you learn?"></textarea>
+    </div>
+    <br>
+    <div class="input-group">
+      <span class="input-group-addon">@</span>
+      <input type="text" class="form-control" name="nick" value="" placeholder="nick (optional)">
+    </div>
+    <br>
+    <input type="submit" value="Submit">
   </form>
 {% endblock %}
