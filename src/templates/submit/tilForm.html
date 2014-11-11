@@ -3,14 +3,24 @@
 {% block maincontent %}
   <h3>Share your TIL:</h3>
   <form action="" method="POST">
-    <div class="input-group">
-      <span class="input-group-addon">TIL</span>
-      <textarea rows="3" class="form-control" name="til" val="" placeholder="What did you learn?"></textarea>
+    {{ form.csrf_token }}
+    <div class="input-group {% if form.tilText.errors %} has-error {% endif %}">
+      {{ form.tilText.label(class="input-group-addon") }}
+      {{ form.tilText(placeholder="What did you learn?",
+      class="form-control") }}
     </div>
     <br>
     <div class="input-group">
-      <span class="input-group-addon">@</span>
-      <input type="text" class="form-control" name="nick" value="" placeholder="nick (optional)">
+      {{ form.tilNick.label(class="input-group-addon") }}
+      {{ form.tilNick(placeholder="nick (optional)",
+      class="form-control") }}
+    </div>
+    <br>
+    <div>
+      {% for error in form.recaptcha.error %}
+        {{ error }}
+      {% endfor %}
+      {{ form.recaptcha }}
     </div>
     <br>
     <input type="submit" value="Submit">

@@ -1,11 +1,30 @@
 from flask import Flask, render_template, request
+from wtforms import TextAreaField, TextField
+from wtforms.validators import DataRequired
+from flask.ext.wtf import Form
+from flask.ext.wtf.recaptcha import RecaptchaField
 from flask_bootstrap import Bootstrap
 from src.dbHelper.dbHelper import DBHelper
 from src.apikeys import ORCHESTRATE_KEY
 
 
+DEBUG = True
+SECRET_KEY = 'secret'
+
+RECAPTCHA_PUBLIC_KEY = '6Lf7jP0SAAAAAKDw2YOCMgkwbXfNO3-SG2yf1cTH'
+RECAPTCHA_PRIVATE_KEY = '6Lf7jP0SAAAAAKHYkfIMAGQSMMV_FNnpIeolOM0K'
+
+
+class TILForm(Form):
+
+    tilText = TextAreaField('TIL', validators=[DataRequired()])
+    tilNick = TextField('@')
+    recaptcha = RecaptchaField()
+
+
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(__name__)
     Bootstrap(app)
     db = DBHelper(ORCHESTRATE_KEY)
 
@@ -26,21 +45,28 @@ def create_app():
         pass
 
     @app.route('/submit', methods=['GET', 'POST'])
-    def submit():
+    def submit(form=None):
         if request.method == 'POST':
-            if request.form['til'] is "":  # improve me
-                return render_template('submit/tilForm.html')
+            form = TILForm()
+            if form.validate_on_submit():
+                if request.form['tilText'] is "":  # improve me
+                    return render_template('submit/tilForm.html')
+                else:
+                    til_text = request.form['tilText']
+                if request.form['tilNick'] is "":
+                    til_nick = 'anon'
+                else:
+                    til_nick = request.form['tilNick']
+                db.saveTIL(til_text, til_nick)
+                return render_template('submit/submitted.html',
+                                       text=til_text)
             else:
-                til_text = request.form['til']
-            if request.form['nick'] is "":
-                til_nick = 'anon'
-            else:
-                til_nick = request.form['nick']
-            db.saveTIL(til_text, til_nick)
-            return render_template('submit/submitted.html',
-                                   text=til_text)
+                return render_template('submit/tilForm.html', form=form)
         else:
-            return render_template('submit/tilForm.html')
+            if form is None:
+                form = TILForm()
+            return render_template('submit/tilForm.html',
+                                   form=form)
 
     @app.route('/about')
     def about():
@@ -48,7 +74,8 @@ def create_app():
 
     return app
 
+
 app = create_app()
 
 if __name__ == '__main__':
-    create_app().run(debug=True)
+    create_app().run()
