@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 from wtforms import TextAreaField, TextField
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
@@ -6,6 +6,7 @@ from flask.ext.wtf.recaptcha import RecaptchaField
 from flask_bootstrap import Bootstrap
 from src.dbHelper.dbHelper import DBHelper
 from src.apikeys import ORCHESTRATE_KEY
+from pokemonNames.pokemonNames import PokemonNames
 
 
 DEBUG = True
@@ -19,7 +20,9 @@ class TILForm(Form):
 
     tilText = TextAreaField('TIL', validators=[DataRequired()])
     tilNick = TextField('@')
-    recaptcha = RecaptchaField()
+    test = DEBUG
+    if not test:
+        recaptcha = RecaptchaField()
 
 
 def create_app():
@@ -27,6 +30,7 @@ def create_app():
     app.config.from_object(__name__)
     Bootstrap(app)
     db = DBHelper(ORCHESTRATE_KEY)
+    randName = PokemonNames()
 
     @app.route('/')
     def home():
@@ -49,17 +53,14 @@ def create_app():
         if request.method == 'POST':
             form = TILForm()
             if form.validate_on_submit():
-                if request.form['tilText'] is "":  # improve me
-                    return render_template('submit/tilForm.html')
-                else:
-                    til_text = request.form['tilText']
-                if request.form['tilNick'] is "":
-                    til_nick = 'anon'
+                til_text = request.form['tilText']
+                if request.form['tilNick'] == '':
+                    til_nick = 'Anonymous ' + randName.get_random_name()
                 else:
                     til_nick = request.form['tilNick']
                 db.saveTIL(til_text, til_nick)
-                return render_template('submit/submitted.html',
-                                       text=til_text)
+                flash('TIL shared successfully!')
+                return redirect(url_for("today"))
             else:
                 return render_template('submit/tilForm.html', form=form)
         else:
