@@ -17,10 +17,12 @@
     </div>
     <br>
     <div>
-      {% for error in form.recaptcha.error %}
-        {{ error }}
-      {% endfor %}
-      {{ form.recaptcha }}
+      {% if not form.test %}
+        {% for error in form.recaptcha.error %}
+          {{ error }}
+        {% endfor %}
+        {{ form.recaptcha }}
+      {% endif %}
     </div>
     <br>
     <input type="submit" value="Submit">

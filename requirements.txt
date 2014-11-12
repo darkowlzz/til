@@ -5,3 +5,4 @@ porc
 flake8
 Flask-Bootstrap
 Flask-WTF
+pokemonNames

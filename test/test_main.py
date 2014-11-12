@@ -22,17 +22,13 @@ def test_submit_get():
     assert 'Share your TIL' in rv.data
 
 
-""" Can't test page with captcha
 def test_submit_post():
     '''test /submit (POST)'''
     rv = app.post('/submit', data=dict(
         til='learnt flask',
         nick='nosetest',
     ), follow_redirects=True)
-    assert 'Share your TIL' not in rv.data
-    assert 'Submitted TIL' in rv.data
-    assert 'learnt flask' in rv.data
-"""
+    assert 'TIL shared successfully!' not in rv.data
 
 
 def test_about():
