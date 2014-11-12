@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request, flash, redirect, url_for
 from wtforms import TextAreaField, TextField
 from wtforms.validators import DataRequired
@@ -5,22 +7,19 @@ from flask.ext.wtf import Form
 from flask.ext.wtf.recaptcha import RecaptchaField
 from flask_bootstrap import Bootstrap
 from src.dbHelper.dbHelper import DBHelper
-from src.apikeys import ORCHESTRATE_KEY
 from pokemonNames.pokemonNames import PokemonNames
 
+SECRET_KEY = os.environ.get('SECRET_KEY', '-1')
 
-DEBUG = True
-SECRET_KEY = 'secret'
-
-RECAPTCHA_PUBLIC_KEY = '6Lf7jP0SAAAAAKDw2YOCMgkwbXfNO3-SG2yf1cTH'
-RECAPTCHA_PRIVATE_KEY = '6Lf7jP0SAAAAAKHYkfIMAGQSMMV_FNnpIeolOM0K'
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY', '-1')
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', '-1')
 
 
 class TILForm(Form):
 
     tilText = TextAreaField('TIL', validators=[DataRequired()])
     tilNick = TextField('@')
-    test = DEBUG
+    test = eval(os.environ.get('TEST', '-1'))
     if not test:
         recaptcha = RecaptchaField()
 
@@ -29,7 +28,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(__name__)
     Bootstrap(app)
-    db = DBHelper(ORCHESTRATE_KEY)
+    db = DBHelper(os.environ.get('ORCHESTRATE_KEY', '-1'))
     randName = PokemonNames()
 
     @app.route('/')
@@ -66,8 +65,7 @@ def create_app():
         else:
             if form is None:
                 form = TILForm()
-            return render_template('submit/tilForm.html',
-                                   form=form)
+            return render_template('submit/tilForm.html', form=form)
 
     @app.route('/about')
     def about():
