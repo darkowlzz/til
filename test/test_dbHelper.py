@@ -1,7 +1,8 @@
-from src.dbHelper.dbHelper import DBHelper
-from src.apikeys import ORCHESTRATE_KEY
 import porc
 
+from src.dbHelper.dbHelper import DBHelper
+
+ORCHESTRATE_KEY = '1de49651-92d0-4f7c-ae0b-ee92506a55f4'
 COLLECTION_STATS = 'til_stats'
 COLLECTION_TIL = 'til_til'
 
