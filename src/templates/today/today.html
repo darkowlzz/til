@@ -5,7 +5,16 @@
   <ul class="list-group">
     {% for item in data %}
     <li class="list-group-item">
-      <cite>"{{ item['value']['text'] }}"</cite> - {{ item['value']['nick'] }}
+      <blockquote>
+        <p class="lead">"{{ item['value']['text'] }}"</p>
+      </blockquote>
+      <p class="text-right">
+       <small>{{ item['value']['nick'] }}</small><br>
+       {% if item['value']['time'] %}
+         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+         <small>{{ item['value']['time'] }}</small>
+       {% endif %}
+      </p>
     </li>
     {% endfor %}
   </ul>
