@@ -44,4 +44,4 @@ def test_getRecentTIL():
     '''Testing getRecentTIL'''
     pages = db.getRecentTIL()
     page = pages.next()
-    assert 'count' in page.keys()
+    assert 'count' in page.keys()  # count of number of items retrieved
