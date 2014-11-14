@@ -26,6 +26,14 @@ def test_today():
     assert 'What people have learnt' in rv.data
 
 
+def test_today_more():
+    '''testing /today/<pageno>'''
+    rv = app.get('/today/1')
+    assert '/today/2' in rv.data
+    rv = app.get('/nomore')  # nomore.html test
+    assert 'No more' in rv.data
+
+
 def test_submit_get():
     '''testing /submit (GET)'''
     rv = app.get('/submit')

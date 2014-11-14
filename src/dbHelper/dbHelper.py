@@ -53,5 +53,5 @@ class DBHelper():
 
     def getRecentTIL(self):
         '''Returns `pages` containing the saved TIL'''
-        pages = self.client.list(COLLECTION_TIL)
+        pages = self.client.search(COLLECTION_TIL, '*', sort='value.id:desc')
         return pages

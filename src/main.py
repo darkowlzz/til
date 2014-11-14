@@ -9,6 +9,7 @@ from flask_bootstrap import Bootstrap
 from src.dbHelper.dbHelper import DBHelper
 from pokemonNames.pokemonNames import PokemonNames
 
+DEBUG = os.environ.get('DEBUG', '-1')
 SECRET_KEY = os.environ.get('SECRET_KEY', '-1')
 
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY', '-1')
@@ -40,12 +41,24 @@ def create_app():
         pages = db.getRecentTIL()
         page = pages.next()
         results = page['results']
-        results.reverse()
-        return render_template('today/today.html', data=results)
+        return render_template('today/today.html', data=results, page=2)
 
     @app.route('/today/<pageno>')
     def today_more(pageno):
-        pass
+        pageno = int(pageno)
+        nextpage = pageno + 1
+        pages = db.getRecentTIL()
+        try:
+            for i in range(pageno):
+                page = pages.next()
+        except StopIteration:
+            return render_template('today/nomore.html', page=nextpage)
+        results = page['results']
+        return render_template('today/today.html', data=results, page=nextpage)
+
+    @app.route('/nomore')
+    def nomore():
+        return render_template('today/nomore.html')
 
     @app.route('/submit', methods=['GET', 'POST'])
     def submit(form=None):
