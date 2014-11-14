@@ -9,11 +9,12 @@
         <p class="lead">"{{ item['value']['text'] }}"</p>
       </blockquote>
       <p class="text-right">
-       <small>{{ item['value']['nick'] }}</small><br>
-       {% if item['value']['time'] %}
-         <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-         <small><a href="/til/{{ item['value']['id'] }}">{{ item['value']['time'] }}</a></small>
-       {% endif %}
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        <small>{{ item['value']['nick'] }}</small><br>
+        {% if item['value']['time'] %}
+          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+          <small><a href="/til/{{ item['value']['id'] }}">{{ item['value']['time'] }}</a></small>
+        {% endif %}
       </p>
     </li>
     {% endfor %}

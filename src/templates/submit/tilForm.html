@@ -16,15 +16,15 @@
       class="form-control") }}
     </div>
     <br>
-    <div>
-      {% if not form.test %}
-        {% for error in form.recaptcha.error %}
+    {% if not form.test %}
+      <div>
+        {% for error in form.recaptcha.errors %}
           {{ error }}
         {% endfor %}
         {{ form.recaptcha }}
-      {% endif %}
-    </div>
-    <br>
+      </div>
+      <br>
+    {% endif %}
     <input type="submit" value="Submit">
   </form>
 {% endblock %}

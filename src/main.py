@@ -79,6 +79,18 @@ def create_app():
                 flash('TIL shared successfully!')
                 return redirect(url_for("today"))
             else:
+                try:
+                    if form.tilText.errors:
+                        error = 'Error: TIL field is required.'
+                        flash(error)
+                except:
+                    pass
+                try:
+                    if form.recaptcha.errors:
+                        error = 'Error: Invalid word in reCaptcha.'
+                        flash(error)
+                except:
+                    pass
                 return render_template('submit/tilForm.html', form=form)
         else:
             if form is None:

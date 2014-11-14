@@ -33,7 +33,14 @@
       {% if messages %}
         <ul class=flashes>
           {% for message in messages %}
-          <li class="text-success bg-success"><strong>{{ message }}</strong></li>
+            {% if 'Error' in message %}
+            <li class="text-danger bg-danger">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <strong>{{ message }}</strong>
+            </li>
+            {% else %}
+              <li class="text-success bg-success"><strong>{{ message }}</strong></li>
+            {% endif %}
           {% endfor %}
         </ul>
       {% endif %}
