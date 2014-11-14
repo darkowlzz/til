@@ -36,6 +36,11 @@ def create_app():
     def home():
         return render_template('home/home.html')
 
+    @app.route('/til/<id>')
+    def til(id):
+        result = db.getTILbyID(int(id))
+        return render_template('til/til.html', data=result)
+
     @app.route('/today')
     def today():
         pages = db.getRecentTIL()

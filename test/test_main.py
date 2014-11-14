@@ -20,6 +20,13 @@ def test_home():
     assert 'A place to share your TIL' in rv.data
 
 
+def test_til():
+    '''testing /til'''
+    rv = app.get('/til/1')
+    assert 'blockquote' in rv.data
+    assert 'small' in rv.data
+
+
 def test_today():
     '''testing /today'''
     rv = app.get('/today')
