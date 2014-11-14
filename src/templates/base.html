@@ -1,6 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}{% block maintitle %}{% endblock %} - TIL{% endblock %}
 
+{% block head %}
+  {{ super() }}
+  <link rel="shortcut icon" href="/favicon.ico">
+{% endblock %}
+
 {% block navbar %}
   <div class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
