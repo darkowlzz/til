@@ -55,6 +55,19 @@ def test_submit_post():
     ), follow_redirects=True)
     assert 'TIL shared successfully!' not in rv.data
 
+    '''
+    # Find out why this fails
+    rv = app.post('/submit', data=dict(
+        tilText='TIL foo',
+        tilNick='bar',
+    ), follow_redirects=True)
+    print rv.data
+    assert 'TIL shared successfully!' in rv.data
+    '''
+
+    rv = app.post('/submit', data=None, follow_redirects=True)
+    assert 'Error' in rv.data
+
 
 def test_about():
     '''testing /about'''
