@@ -12,7 +12,7 @@
        <small>{{ item['value']['nick'] }}</small><br>
        {% if item['value']['time'] %}
          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-         <small>{{ item['value']['time'] }}</small>
+         <small><a href="/til/{{ item['value']['id'] }}">{{ item['value']['time'] }}</a></small>
        {% endif %}
       </p>
     </li>

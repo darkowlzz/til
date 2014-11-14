@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block maintitle %}TIL{% endblock %}
+{% block maincontent %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h1>
+        <blockquote>
+          <p class="lead">"{{ data['text'] }}"</p>
+        </blockquote>
+        <small>{{ data['nick'] }}</small>
+      </h1>
+      <p class="text-right">
+        {% if data['time'] %}
+          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+          <small>{{ data['time'] }}</small>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+{% endblock %}
