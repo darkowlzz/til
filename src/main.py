@@ -41,6 +41,10 @@ def create_app():
     @app.route('/til/<id>')
     def til(id):
         result = db.getTILbyID(int(id))
+        try:
+            result['time'] = stringifyTime(result['time'])
+        except:
+            pass
         return render_template('til/til.html', data=result)
 
     @app.route('/today')
