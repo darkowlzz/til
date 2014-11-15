@@ -4,6 +4,7 @@
 {% block head %}
   {{ super() }}
   <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"
 {% endblock %}
 
 {% block navbar %}
@@ -33,6 +34,9 @@
 {% endblock %}
 
 {% block content %}
+  {% if not form %}
+    <div class="like"><a href="/submit">+</a></div>
+  {% endif %}
   <div class="container">
     {% with messages = get_flashed_messages() %}
       {% if messages %}

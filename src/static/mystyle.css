@@ -1,0 +1,20 @@
+.like {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background: #ff004c;
+  position: fixed;
+  float: right;
+  right: 25px;
+  bottom: 60px;
+  z-index: 999;
+  text-align: center;
+  padding: 8px;
+  color: white;
+  font: 32px Arial, sans-serif;
+}
+
+.like a {
+  color: white;
+  text-decoration: none;
+}
