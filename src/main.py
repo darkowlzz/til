@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask import send_from_directory
@@ -47,6 +48,7 @@ def create_app():
         pages = db.getRecentTIL()
         page = pages.next()
         results = page['results']
+        results = formatResults(results)
         return render_template('today/today.html', data=results, page=2)
 
     @app.route('/today/<pageno>')
@@ -60,6 +62,7 @@ def create_app():
         except StopIteration:
             return render_template('today/nomore.html', page=nextpage)
         results = page['results']
+        results = formatResults(results)
         return render_template('today/today.html', data=results, page=nextpage)
 
     @app.route('/nomore')
@@ -109,6 +112,28 @@ def create_app():
                                    'favicon.ico', mimetype='image/png')
 
     return app
+
+
+def formatResults(results):  # Write test after moving into a separate module.
+    '''Format the results into easily usable form'''
+    for index, item in enumerate(results):
+        try:
+            timeString = stringifyTime(item['value']['time'])
+            results[index]['value']['time'] = timeString
+        except:
+            pass
+    return results
+
+
+def stringifyTime(dictTime):  # No test. Have to be converted to a package.
+    '''Returns stringified time (Hour:Minute - Day Month Year)'''
+    dataObj = datetime.date(year=dictTime['year'], month=dictTime['month'],
+                            day=dictTime['day'])
+    strDate = dataObj.strftime('%d %B %Y')
+    timeObj = datetime.time(hour=dictTime['hour'], minute=dictTime['minute'])
+    strTime = timeObj.strftime('%H:%M')
+    strFullTime = "%s - %s" % (strTime, strDate)
+    return strFullTime
 
 
 app = create_app()
