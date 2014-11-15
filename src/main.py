@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import send_from_directory
 from wtforms import TextAreaField, TextField
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
@@ -100,6 +101,12 @@ def create_app():
     @app.route('/about')
     def about():
         return render_template('about/about.html')
+
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(os.path.join(app.root_path,
+                                   'static', 'images'),
+                                   'favicon.ico', mimetype='image/png')
 
     return app
 
