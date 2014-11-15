@@ -35,9 +35,13 @@
 
 {% block content %}
   {% if not form %}
-    <div class="createTIL">
-      <span class="circleTextArea"><a href="/submit" class="circleText">+</a></span>
+  <a href="/submit">
+    <div class="createTIL" title="Post TIL">
+      <div class="circleTextArea">
+        <span class="circleText">+</span>
+      </div>
     </div>
+  </a>
   {% endif %}
   <div class="container">
     {% with messages = get_flashed_messages() %}
