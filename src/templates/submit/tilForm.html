@@ -4,15 +4,15 @@
   <h3>Share your TIL:</h3>
   <form action="" method="POST">
     {{ form.csrf_token }}
-    <div class="input-group {% if form.tilText.errors %} has-error {% endif %}">
-      {{ form.tilText.label(class="input-group-addon") }}
-      {{ form.tilText(placeholder="What did you learn?",
+    <div class="input-group {% if form.til_text.errors %} has-error {% endif %}">
+      {{ form.til_text.label(class="input-group-addon") }}
+      {{ form.til_text(placeholder="What did you learn?",
       class="form-control") }}
     </div>
     <br>
     <div class="input-group">
-      {{ form.tilNick.label(class="input-group-addon") }}
-      {{ form.tilNick(placeholder="nick (optional)",
+      {{ form.til_nick.label(class="input-group-addon") }}
+      {{ form.til_nick(placeholder="nick (optional)",
       class="form-control") }}
     </div>
     <br>

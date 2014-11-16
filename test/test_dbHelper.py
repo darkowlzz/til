@@ -11,9 +11,9 @@ db = DBHelper(ORCHESTRATE_KEY)
 client = porc.Client(ORCHESTRATE_KEY)
 
 
-def test_getNextID():
-    '''Testing getNextID'''
-    uid = db.getNextID()
+def test_get_next_id():
+    '''Testing get_next_id'''
+    uid = db.get_next_id()
     assert type(uid) == int
     item = client.get('til_stats', 'data')
     item['idCounter'] -= 1
@@ -21,43 +21,43 @@ def test_getNextID():
                item.json, item.ref).raise_for_status()
 
 
-def test_getIDIndex():
-    '''Testing getIDIndex'''
-    uid = db.getIDIndex()
+def test_get_id_index():
+    '''Testing get_id_index'''
+    uid = db.get_id_index()
     assert type(uid) == int
 
 
-def test_saveTIL():
-    '''Testing saveTIL'''
-    id_before = db.getIDIndex()
-    db.saveTIL('learnt flask', 'mike')
-    id_after = db.getIDIndex()
+def test_save_til():
+    '''Testing save_til'''
+    id_before = db.get_id_index()
+    db.save_til('learnt flask', 'mike')
+    id_after = db.get_id_index()
     assert (id_before + 1) == id_after
 
 
-def test_getTILbyID():
-    '''Testing getTILbyID'''
-    data = db.getTILbyID(1)
+def test_get_til_by_id():
+    '''Testing get_til_by_id'''
+    data = db.get_til_by_id(1)
     assert data['id'] == 1
 
 
-def test_getRecentTIL():
-    '''Testing getRecentTIL'''
-    pages = db.getRecentTIL()
+def test_get_recent_til():
+    '''Testing get_recent_til'''
+    pages = db.get_recent_til()
     page = pages.next()
     assert 'count' in page.keys()  # count of number of items retrieved
 
 
 def test_get_til_total_comments():
     '''Testing get_til_total_comments'''
-    current_index = db.getIDIndex()
+    current_index = db.get_id_index()
     total_comment = db.get_til_total_comments(current_index)
     assert total_comment == 0
 
 
 def test_increment_comment_count():
     '''Testing increment_comment_count'''
-    current_index = db.getIDIndex()
+    current_index = db.get_id_index()
     result = db.increment_comment_count(current_index)
     assert result is True
     total_comment = db.get_til_total_comments(current_index)
@@ -68,7 +68,7 @@ def test_increment_comment_count():
 
 def test_decrement_comment_count():
     '''Testing decrement_comment_count'''
-    current_index = db.getIDIndex()
+    current_index = db.get_id_index()
     result = db.decrement_comment_count(current_index)
     assert result is True
     total_comment = db.get_til_total_comments(current_index)
@@ -79,7 +79,7 @@ def test_decrement_comment_count():
 
 def test_save_comment():
     '''Testing save_comment and get_comment'''
-    current_index = db.getIDIndex()
+    current_index = db.get_id_index()
     t = time.localtime()
     time_now = {'hour': t.tm_hour, 'minute': t.tm_min, 'second': t.tm_sec,
                 'year': t.tm_year, 'month': t.tm_mon, 'day': t.tm_mday}
@@ -91,7 +91,7 @@ def test_save_comment():
 
 def test_get_all_comments():
     '''Testing get_all_comments'''
-    current_index = db.getIDIndex()
+    current_index = db.get_id_index()
     pages = db.get_all_comments(current_index)
     page = pages.next()
     result = page['results'][0]['value']
