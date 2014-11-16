@@ -70,6 +70,33 @@ class DBHelper():
         til = self.get_til_by_id(id)
         return til['comments']
 
+    def get_comment_index(self):
+        '''Returns comment count index'''
+        stats = self.client.get(COLLECTION_STATS, 'data')
+        stats.raise_for_status()
+        return stats['commentCounter']
+
+    def get_next_comment_id(self):
+        '''Returns a new comment id'''
+        stats = self.client.get(COLLECTION_STATS, 'data')
+        stats.raise_for_status()
+        stats['commentCounter'] += 1
+        self.client.put(stats.collection, stats.key,
+                        stats.json, stats.ref).raise_for_status()
+        return stats['commentCounter']
+
+    def decrement_comment_stats(self):
+        '''Decrements comment count in stats'''
+        try:
+            stats = self.client.get(COLLECTION_STATS, 'data')
+            stats.raise_for_status()
+            stats['commentCounter'] -= 1
+            self.client.put(stats.collection, stats.key,
+                            stats.json, stats.ref).raise_for_status()
+            return True
+        except:
+            return False
+
     def increment_comment_count(self, id):
         '''Increments comment count of a TIL
         Argument:
@@ -103,7 +130,7 @@ class DBHelper():
     def get_comment(self, id):
         '''Returns a comment object
         Argument:
-        id -- id of the comment (<til_id>-<comment_no>, eg: 58-1)
+        id -- id of the comment
         '''
         comment = self.client.get(COLLECTION_COMMENTS, id)
         comment.raise_for_status()
@@ -115,7 +142,8 @@ class DBHelper():
         id -- TIL id
         '''
         query = Q('tilId', id)
-        pages = self.client.search(COLLECTION_COMMENTS, query)
+        pages = self.client.search(COLLECTION_COMMENTS, query,
+                                   sort='value.commentId:asc')
         return pages
 
     def save_comment(self, id, comment, nick, time):
@@ -128,12 +156,11 @@ class DBHelper():
         '''
         id = int(id)
         try:
-            data = {'tilId': id, 'comment': comment,
+            comment_id = self.get_next_comment_id()
+            data = {'tilId': id, 'comment': comment, 'commentId': comment_id,
                     'nick': nick, 'time': time}
-            comment_index = self.get_til_total_comments(id)
-            comment_key = "%d-%d" % (id, comment_index+1)
             self.client.put(COLLECTION_COMMENTS,
-                            comment_key, data).raise_for_status()
+                            comment_id, data).raise_for_status()
             self.increment_comment_count(id)
             return True
         except:

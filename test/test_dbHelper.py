@@ -48,6 +48,22 @@ def test_get_recent_til():
     assert 'count' in page.keys()  # count of number of items retrieved
 
 
+def test_get_next_comment_id():
+    '''Testing get_next_comment_id'''
+    comment_before = db.get_comment_index()
+    next_comment = db.get_next_comment_id()
+    assert (comment_before+1) == next_comment
+
+
+def test_decrement_comment_stats():
+    '''Testing decrement_comment_stats'''
+    comment_before = db.get_comment_index()
+    r = db.decrement_comment_stats()
+    assert r is True
+    comment_after = db.get_comment_index()
+    assert (comment_before-1) == comment_after
+
+
 def test_get_til_total_comments():
     '''Testing get_til_total_comments'''
     current_index = db.get_id_index()
@@ -84,7 +100,7 @@ def test_save_comment():
     time_now = {'hour': t.tm_hour, 'minute': t.tm_min, 'second': t.tm_sec,
                 'year': t.tm_year, 'month': t.tm_mon, 'day': t.tm_mday}
     db.save_comment(current_index, 'cool!', 'anon piglet', time_now)
-    comment_index = '%d-%d' % (current_index, 1)
+    comment_index = db.get_comment_index()
     item = db.get_comment(comment_index)
     assert item['comment'] == 'cool!'
 
