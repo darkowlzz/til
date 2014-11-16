@@ -110,6 +110,7 @@ def test_get_all_comments():
     current_index = db.get_id_index()
     pages = db.get_all_comments(current_index)
     page = pages.next()
-    result = page['results'][0]['value']
+    results = page['results']
+    result = results[0]['value']
     assert result['comment'] == 'cool!'
     assert result['nick'] == 'anon piglet'
