@@ -1,5 +1,7 @@
 import porc
 
+from porc.util import Q
+
 COLLECTION_STATS = 'til_stats'
 COLLECTION_TIL = 'til_til'
 COLLECTION_COMMENTS = 'til_comments'
@@ -99,13 +101,22 @@ class DBHelper():
             return False
 
     def get_comment(self, id):
-        ''' Returns a comment object
+        '''Returns a comment object
         Argument:
         id -- id of the comment (<til_id>-<comment_no>, eg: 58-1)
         '''
         comment = self.client.get(COLLECTION_COMMENTS, id)
         comment.raise_for_status()
         return comment.json
+
+    def get_all_comments(self, id):
+        '''Returns all the comments of a given TIL id
+        Argument:
+        id -- TIL id
+        '''
+        query = Q('tilId', id)
+        pages = self.client.search(COLLECTION_COMMENTS, query)
+        return pages
 
     def save_comment(self, id, comment, nick, time):
         '''Saves comment in the database.
@@ -115,13 +126,12 @@ class DBHelper():
         nick    -- nick of the commenting user
         time    -- time when the comment is made
         '''
+        id = int(id)
         try:
             data = {'tilId': id, 'comment': comment,
                     'nick': nick, 'time': time}
-            print data
             comment_index = self.get_til_total_comments(id)
             comment_key = "%d-%d" % (id, comment_index+1)
-            print comment_key
             self.client.put(COLLECTION_COMMENTS,
                             comment_key, data).raise_for_status()
             self.increment_comment_count(id)
