@@ -1,5 +1,6 @@
 import os
 import datetime
+import time
 
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask import send_from_directory
@@ -27,6 +28,13 @@ class TILForm(Form):
         recaptcha = RecaptchaField()
 
 
+class CommentForm(Form):
+
+    comment_text = TextAreaField('Comment', validators=[DataRequired()])
+    comment_nick = TextField('@')
+    comment_til_id = TextField('TIL id', validators=[DataRequired()])
+
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(__name__)
@@ -45,7 +53,13 @@ def create_app():
             result['time'] = stringifyTime(result['time'])
         except:
             pass
-        return render_template('til/til.html', data=result)
+        comments_pages = db.get_all_comments(int(id))
+        comments_page = comments_pages.next()
+        comments = comments_page['results']
+        comments = formatResults(comments)
+        form = CommentForm()
+        return render_template('til/til.html', data=result,
+                               comments=comments, form=form)
 
     @app.route('/today')
     def today():
@@ -85,7 +99,7 @@ def create_app():
                     til_nick = request.form['tilNick']
                 db.saveTIL(til_text, til_nick)
                 flash('TIL shared successfully!')
-                return redirect(url_for("today"))
+                return redirect(url_for('today'))
             else:
                 try:
                     if form.tilText.errors:
@@ -104,6 +118,32 @@ def create_app():
             if form is None:
                 form = TILForm()
             return render_template('submit/tilForm.html', form=form)
+
+    @app.route('/comment', methods=['POST'])
+    def comment(form=None):
+        if request.method == 'POST':
+            form = CommentForm()
+            if form.validate_on_submit():
+                t = time.localtime()
+                time_now = {'hour': t.tm_hour, 'minute': t.tm_min,
+                            'second': t.tm_sec, 'year': t.tm_year,
+                            'month': t.tm_mon, 'day': t.tm_mday}
+                if request.form['comment_nick'] == '':
+                    comment_nick = 'Anonymous ' + randName.get_random_name()
+                else:
+                    comment_nick = request.form['comment_nick']
+                comment_text = request.form['comment_text']
+                comment_til_id = request.form['comment_til_id']
+                r = db.save_comment(comment_til_id, comment_text,
+                                    comment_nick, time_now)
+                if r:
+                    flash('Comment saved!')
+                else:
+                    flash('Error: Comment failed to save')
+                return redirect(request.referrer)
+            else:
+                flash('Error in comment form')
+                return redirect(request.referrer)
 
     @app.route('/about')
     def about():

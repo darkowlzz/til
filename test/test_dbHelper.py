@@ -87,3 +87,13 @@ def test_save_comment():
     comment_index = '%d-%d' % (current_index, 1)
     item = db.get_comment(comment_index)
     assert item['comment'] == 'cool!'
+
+
+def test_get_all_comments():
+    '''Testing get_all_comments'''
+    current_index = db.getIDIndex()
+    pages = db.get_all_comments(current_index)
+    page = pages.next()
+    result = page['results'][0]['value']
+    assert result['comment'] == 'cool!'
+    assert result['nick'] == 'anon piglet'

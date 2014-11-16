@@ -27,6 +27,19 @@ def test_til():
     assert 'small' in rv.data
 
 
+"""  # Fails maybe because `referer` isn't defined.
+def test_comment():
+    '''testing /comment'''
+    rv = app.post('/comment', data=dict(
+        comment_nick='foo',
+        comment_text='test comment',
+        comment_til_id='1',
+    ), follow_redirects=True)
+    rv2 = app.get('/til/1')
+    assert 'test comment' in rv2.data
+"""
+
+
 def test_today():
     '''testing /today'''
     rv = app.get('/today')

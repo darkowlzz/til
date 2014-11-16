@@ -19,4 +19,41 @@
     </div>
   </div>
 
+  <div class="panel panel-default">
+    <div class="panel-heading">Comments</div>
+    <div class="panel-body">
+      <ul class="list-group">
+        {% for comment in comments %}
+        <li class="list-group-item">
+        <p>{{ comment['value']['comment']}}</p>
+        <p class="text-right">
+          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+          <small>{{ comment['value']['nick'] }}</small><br>
+          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+          <small>{{ comment['value']['time'] }}</small>
+        </p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <form action="/comment" method="POST">
+    {{ form.csrf_token }}
+    <div class="input-group">
+      {{ form.comment_text.label(class="input-group-addon") }}
+      {{ form.comment_text(placeholder="Write comment here",
+      class="form-control") }}
+    </div>
+    <br>
+    <div class="input-group">
+      {{ form.comment_nick.label(class="input-group-addon") }}
+      {{ form.comment_nick(placeholder="nick",
+      class="form-control") }}
+    </div>
+    <br>
+    <input type="hidden" name="comment_til_id" value="{{ data['id'] }}">
+    <input type="submit" value="Comment">
+  </form>
+
 {% endblock %}
