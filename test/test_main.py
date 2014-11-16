@@ -71,8 +71,8 @@ def test_submit_post():
     '''
     # Find out why this fails
     rv = app.post('/submit', data=dict(
-        tilText='TIL foo',
-        tilNick='bar',
+        til_text='TIL foo',
+        til_nick='bar',
     ), follow_redirects=True)
     print rv.data
     assert 'TIL shared successfully!' in rv.data

@@ -2,8 +2,8 @@ import os
 import datetime
 import time
 
-from flask import Flask, render_template, request, flash, redirect, url_for
-from flask import send_from_directory
+from flask import (Flask, render_template, request, flash,
+                   redirect, url_for, send_from_directory)
 from wtforms import TextAreaField, TextField
 from wtforms.validators import DataRequired
 from flask.ext.wtf import Form
@@ -21,8 +21,8 @@ RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', '-1')
 
 class TILForm(Form):
 
-    tilText = TextAreaField('TIL', validators=[DataRequired()])
-    tilNick = TextField('@')
+    til_text = TextAreaField('TIL', validators=[DataRequired()])
+    til_nick = TextField('@')
     test = eval(os.environ.get('TEST', '-1'))
     if not test:
         recaptcha = RecaptchaField()
@@ -48,39 +48,39 @@ def create_app():
 
     @app.route('/til/<id>')
     def til(id):
-        result = db.getTILbyID(int(id))
+        result = db.get_til_by_id(int(id))
         try:
-            result['time'] = stringifyTime(result['time'])
+            result['time'] = stringify_time(result['time'])
         except:
             pass
         comments_pages = db.get_all_comments(int(id))
         comments_page = comments_pages.next()
         comments = comments_page['results']
-        comments = formatResults(comments)
+        comments = format_results(comments)
         form = CommentForm()
         return render_template('til/til.html', data=result,
                                comments=comments, form=form)
 
     @app.route('/today')
     def today():
-        pages = db.getRecentTIL()
+        pages = db.get_recent_til()
         page = pages.next()
         results = page['results']
-        results = formatResults(results)
+        results = format_results(results)
         return render_template('today/today.html', data=results, page=2)
 
     @app.route('/today/<pageno>')
     def today_more(pageno):
         pageno = int(pageno)
         nextpage = pageno + 1
-        pages = db.getRecentTIL()
+        pages = db.get_recent_til()
         try:
             for i in range(pageno):
                 page = pages.next()
         except StopIteration:
             return render_template('today/nomore.html', page=nextpage)
         results = page['results']
-        results = formatResults(results)
+        results = format_results(results)
         return render_template('today/today.html', data=results, page=nextpage)
 
     @app.route('/nomore')
@@ -92,17 +92,17 @@ def create_app():
         if request.method == 'POST':
             form = TILForm()
             if form.validate_on_submit():
-                til_text = request.form['tilText']
-                if request.form['tilNick'] == '':
+                til_text = request.form['til_text']
+                if request.form['til_nick'] == '':
                     til_nick = 'Anonymous ' + randName.get_random_name()
                 else:
-                    til_nick = request.form['tilNick']
-                db.saveTIL(til_text, til_nick)
+                    til_nick = request.form['til_nick']
+                db.save_til(til_text, til_nick)
                 flash('TIL shared successfully!')
                 return redirect(url_for('today'))
             else:
                 try:
-                    if form.tilText.errors:
+                    if form.til_text.errors:
                         error = 'Error: TIL field is required.'
                         flash(error)
                 except:
@@ -158,18 +158,18 @@ def create_app():
     return app
 
 
-def formatResults(results):  # Write test after moving into a separate module.
+def format_results(results):  # Write test after moving into a separate module.
     '''Format the results into easily usable form'''
     for index, item in enumerate(results):
         try:
-            timeString = stringifyTime(item['value']['time'])
+            timeString = stringify_time(item['value']['time'])
             results[index]['value']['time'] = timeString
         except:
             pass
     return results
 
 
-def stringifyTime(dictTime):  # No test. Have to be converted to a package.
+def stringify_time(dictTime):  # No test. Have to be converted to a package.
     '''Returns stringified time (Hour:Minute - Day Month Year)'''
     dataObj = datetime.date(year=dictTime['year'], month=dictTime['month'],
                             day=dictTime['day'])

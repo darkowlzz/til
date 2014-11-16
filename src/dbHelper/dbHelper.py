@@ -18,7 +18,7 @@ class DBHelper():
         self.api_key = api_key
         self.client = porc.Client(self.api_key)
 
-    def getNextID(self):
+    def get_next_id(self):
         '''Returns an new ID.'''
         item = self.client.get(COLLECTION_STATS, 'data')
         item.raise_for_status()
@@ -27,20 +27,20 @@ class DBHelper():
                         item.json, item.ref).raise_for_status()
         return item['idCounter']
 
-    def getIDIndex(self):
+    def get_id_index(self):
         '''Returns index of current ID.'''
         item = self.client.get(COLLECTION_STATS, 'data')
         item.raise_for_status()
         return item['idCounter']
 
-    def saveTIL(self, text='', nick='jimmy'):
+    def save_til(self, text='', nick='jimmy'):
         '''Saves TIL in the database.
         Arguments:
         text -- submitted TIL text
         nick -- nick of the user submitting the TIL
         '''
         try:
-            uid = self.getNextID()
+            uid = self.get_next_id()
             data = {'id': uid, 'nick': nick, 'text': text, 'comments': 0}
             response = self.client.put(COLLECTION_TIL, uid, data)
             response.raise_for_status()
@@ -48,7 +48,7 @@ class DBHelper():
         except:
             return False
 
-    def getTILbyID(self, id):
+    def get_til_by_id(self, id):
         '''Returns a dictionary with all the TIL data of the given TIL id
         Arguments:
         id -- id of the requested TIL
@@ -57,7 +57,7 @@ class DBHelper():
         item.raise_for_status()
         return item.json
 
-    def getRecentTIL(self):
+    def get_recent_til(self):
         '''Returns `pages` containing the saved TIL'''
         pages = self.client.search(COLLECTION_TIL, '*', sort='value.id:desc')
         return pages
@@ -67,7 +67,7 @@ class DBHelper():
         Argument:
         id -- id of TIL object
         '''
-        til = self.getTILbyID(id)
+        til = self.get_til_by_id(id)
         return til['comments']
 
     def increment_comment_count(self, id):
