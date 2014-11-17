@@ -97,7 +97,11 @@ def create_app():
                     til_nick = 'Anonymous ' + randName.get_random_name()
                 else:
                     til_nick = request.form['til_nick']
-                db.save_til(til_text, til_nick)
+                t = time.localtime()
+                time_now = {'hour': t.tm_hour, 'minute': t.tm_min,
+                            'second': t.tm_sec, 'year': t.tm_year,
+                            'month': t.tm_mon, 'day': t.tm_mday}
+                db.save_til(til_text, til_nick, time_now)
                 flash('TIL shared successfully!')
                 return redirect(url_for('today'))
             else:

@@ -30,7 +30,12 @@ def test_get_id_index():
 def test_save_til():
     '''Testing save_til'''
     id_before = db.get_id_index()
-    db.save_til('learnt flask', 'mike')
+    t = time.localtime()
+    time_now = {'hour': t.tm_hour, 'minute': t.tm_min,
+                'second': t.tm_sec, 'year': t.tm_year,
+                'month': t.tm_mon, 'day': t.tm_mday}
+
+    db.save_til('learnt flask', 'mike', time_now)
     id_after = db.get_id_index()
     assert (id_before + 1) == id_after
 
@@ -114,3 +119,13 @@ def test_get_all_comments():
     result = results[0]['value']
     assert result['comment'] == 'cool!'
     assert result['nick'] == 'anon piglet'
+def test_save_time():
+    '''Testing date and time in saveTIL'''
+    t = time.localtime()
+    time_now = {'hour': t.tm_hour, 'minute': t.tm_min,
+                'second': t.tm_sec, 'year': t.tm_year,
+                'month': t.tm_mon, 'day': t.tm_mday}
+    result = db.save_til("learnt xyz", "anon", time_now)
+    assert result is True
+    data = db.get_til_by_id(db.get_id_index())
+    assert data["time"] == time_now

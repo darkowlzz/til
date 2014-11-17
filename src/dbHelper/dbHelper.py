@@ -33,7 +33,7 @@ class DBHelper():
         item.raise_for_status()
         return item['idCounter']
 
-    def save_til(self, text='', nick='jimmy'):
+    def save_til(self, text, nick, time):
         '''Saves TIL in the database.
         Arguments:
         text -- submitted TIL text
@@ -41,7 +41,7 @@ class DBHelper():
         '''
         try:
             uid = self.get_next_id()
-            data = {'id': uid, 'nick': nick, 'text': text, 'comments': 0}
+            data = {'id': uid, 'nick': nick, 'text': text, 'comments': 0, 'time': time}
             response = self.client.put(COLLECTION_TIL, uid, data)
             response.raise_for_status()
             return True
