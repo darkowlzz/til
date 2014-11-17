@@ -35,7 +35,7 @@ def test_save_til():
                 'second': t.tm_sec, 'year': t.tm_year,
                 'month': t.tm_mon, 'day': t.tm_mday}
 
-    db.save_til('learnt flask', 'mike',time_now)
+    db.save_til('learnt flask', 'mike', time_now)
     id_after = db.get_id_index()
     assert (id_before + 1) == id_after
 
