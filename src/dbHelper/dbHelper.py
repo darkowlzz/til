@@ -41,7 +41,8 @@ class DBHelper():
         '''
         try:
             uid = self.get_next_id()
-            data = {'id': uid, 'nick': nick, 'text': text, 'comments': 0, 'time': time}
+            data = {'id': uid, 'nick': nick, 'text': text,
+                    'comments': 0, 'time': time}
             response = self.client.put(COLLECTION_TIL, uid, data)
             response.raise_for_status()
             return True
