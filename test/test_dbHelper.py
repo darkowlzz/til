@@ -119,6 +119,8 @@ def test_get_all_comments():
     result = results[0]['value']
     assert result['comment'] == 'cool!'
     assert result['nick'] == 'anon piglet'
+
+
 def test_save_time():
     '''Testing date and time in saveTIL'''
     t = time.localtime()
